@@ -62,6 +62,35 @@ app.get("/getCars/:carClass", async (req, res) => {
   }
 })
 
+app.post("/createBooking", async (req, res) => {
+  const date1 = req.body.date1
+  const date2 = req.body.date2
+  const dayQtd = req.body.dayQtd
+  const value = req.body.value
+  const userEmail = req.body.currentUserEmail
+  const carClass = req.body.carClass
+
+  const createdBooking = await prisma.users.update({
+    where:{
+      email: userEmail
+    },
+    data:{
+      bookings:{
+        create:{
+          date1: date1,
+          date2: date2,
+          dayQtd: dayQtd,
+          value: value,
+          carClass: carClass
+        }
+      }
+    }
+  })
+
+  res.send(createdBooking)
+
+})
+
 app.listen(3001, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:3001`);
 });

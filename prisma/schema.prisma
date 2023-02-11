@@ -10,11 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model bookings {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  date1   String
+  date2   String
+  dayQtd  Int
+  value   Int
+  carClass String
+  owner   users  @relation(fields: [ownerId], references: [id])
+  ownerId String @db.ObjectId
+}
+
 model users {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  email    String @unique
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  email    String     @unique
   password String
   username String
+  bookings bookings[]
 }
 
 model vehicles {

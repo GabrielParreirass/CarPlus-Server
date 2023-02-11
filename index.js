@@ -71,6 +71,31 @@ app.get("/getCars/:carClass", (req, res) => __awaiter(void 0, void 0, void 0, fu
         res.json({ message: "Veiculo não encontrado!" });
     }
 }));
+app.post("/createBooking", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const date1 = req.body.date1;
+    const date2 = req.body.date2;
+    const dayQtd = req.body.dayQtd;
+    const value = req.body.value;
+    const userEmail = req.body.currentUserEmail;
+    const carClass = req.body.carClass;
+    const createdBooking = yield prisma.users.update({
+        where: {
+            email: userEmail
+        },
+        data: {
+            bookings: {
+                create: {
+                    date1: date1,
+                    date2: date2,
+                    dayQtd: dayQtd,
+                    value: value,
+                    carClass: carClass
+                }
+            }
+        }
+    });
+    res.send(createdBooking);
+}));
 app.listen(3001, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:3001`);
 });
